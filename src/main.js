@@ -108,6 +108,7 @@ function wins() {
     wheel.lineWidth = 1.5;
     wheel.rotationSpeedMax = 1000;
     wheel.rotationResistance = -240;
+    wheel.image = "./imgs/hyiep.png"
     wheel.onRest = async (e) => {
         await wheelFinishAnimation(wheel, wheel._items[e.currentIndex]);
         currentGame.wins = wheel._items[e.currentIndex].label;
@@ -135,6 +136,7 @@ function times() {
     wheel.lineWidth = 1.5;
     wheel.rotationSpeedMax = 1000;
     wheel.rotationResistance = -240;
+    wheel.image = "./imgs/hyiep.png"
     wheel.onRest = async (e) => {
         await wheelFinishAnimation(wheel, wheel._items[e.currentIndex]);
         currentGame.time = wheel._items[e.currentIndex].label;
@@ -166,6 +168,7 @@ function games() {
     wheel.rotationSpeedMax = 1000;
     wheel.itemLabelFontSizeMax = 70;
     wheel.rotationResistance = -240;
+    wheel.image = "./imgs/hyiep.png"
     wheel.onRest = async (e) => {
         let finishItem = wheel._items[e.currentIndex];
         await gameFinishAnimation(wheel, finishItem);
