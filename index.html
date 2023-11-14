@@ -1,0 +1,37 @@
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIN THE HYIEP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,1000;1,9..40,300;1,9..40,400;1,9..40,500;1,9..40,600;1,9..40,700;1,9..40,800&display=swap" rel="stylesheet">
+    <!--link rel="stylesheet" type="text/css" href="./src/bootstrap/bootstrap.css" /--> 
+    <link rel="stylesheet" type="text/css" href="./src/style.css" />
+</head>
+<body>
+    <main>
+        <div class="container" id="time">
+            <button class="headlinebutton" role="button">TIME</button>
+            <div class="wheel-container" id="time-wheel"></div>
+        </div>
+        <div class="container" id="games">
+            <button class="headlinebutton" role="button">GAMES</button>
+            <div class="wheel-container" id="games-wheel"></div>
+        </div>
+        <div class="container" id="wins">
+            <button class="headlinebutton" role="button">WINS</button>
+            <div class="wheel-container" id="wins-wheel"></div>
+        </div>
+        <div id="result">
+            <table>
+                <tbody id="result_table">
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/spin-wheel@4.2.0/dist/spin-wheel-iife.js"></script>
+    <script type="text/javascript" src="./items.js"></script>
+    <script type="text/javascript" src="./src/main.js"></script>
+</body>
+</html>

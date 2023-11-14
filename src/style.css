@@ -1,0 +1,90 @@
+body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: #E0E0E0;
+}
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3px;
+}
+
+.container {
+    text-align: center;
+}
+
+.container .headlinebutton {
+    font-size: 2.2em;
+   /* padding: 5px;
+    margin: 5px;*/
+    margin: 15px 5px 20px 5px;
+}
+
+.wheel-container {
+    min-height: 30vw;
+}
+
+#result {
+    margin-top: 20px;
+    width: 100%;
+    grid-column: 1 / -1;
+}
+#result table {
+    padding-left: 20px;
+    font-size: 2em;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0px 20px;
+}
+
+#result table tr {
+    padding: 20px;
+
+    font-family: "Open Sans", sans-serif;
+    letter-spacing: 2px;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #000;
+    cursor: pointer;
+    border: 3px solid;
+    padding: 0.75em 0.5em;
+    box-shadow: -1px 1px 0px 0px, -2px 2px 0px 0px, -3px 3px 0px 0px, -4px 4px 0px 0px, -5px 5px 0px 0px;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    margin: 10px 0px;
+}
+
+#result table td {
+    padding: 10px 10px;
+}
+
+
+.headlinebutton {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #000;
+  cursor: pointer;
+  border: 3px solid;
+  padding: 0.25em 0.5em;
+  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.headlinebutton:enabled:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
+}
+
+@media (min-width: 768px) {
+  .headlinebutton {
+    padding: 0.25em 0.75em;
+  }
+}
