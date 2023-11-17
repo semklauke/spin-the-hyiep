@@ -7,14 +7,16 @@ if (typeof spinwheeldata === 'undefined') {
 
 const data = spinwheeldata;
 const result_table = document.getElementById("result_table");
+const result_header = document.getElementById("result_header");
 let time_btn = document.querySelector("#time button");
 let games_btn = document.querySelector("#games button");
 let wins_btn = document.querySelector("#wins button");
 let globalResetOk = false;
 let currentGame = {
     time: null,
-    game: null,
+    games: {},
     wins: null,
+    winsToGo: null,
 }
 
 let winsWheel = null, timeWheel = null, gamesWheel = null;
@@ -74,13 +76,30 @@ function activateButtons(state) {
     games_btn.disabled = !state;
 }
 
-function addResult() {
-    let tr = document.createElement("tr");
-    let td = document.createElement("td");
+function addGame(g) {
     let cg = currentGame;
-    td.innerHTML = `<b>${cg.wins}x ${cg.game}</b> in <b>${cg.time}</b>`;
-    tr.appendChild(td);
-    result_table.appendChild(tr);
+    let td = null;
+    if (g in cg.games) {
+        cg.games[g].wins += 1;
+        td = cg.games[g].td;
+    } else {
+        let tr = document.createElement("tr");
+        td = document.createElement("td");
+        tr.appendChild(td);
+        result_table.appendChild(tr);
+        cg.games[g] = {
+            wins: 1,
+            td: td
+        }
+    }
+    td.innerHTML = `<b>${cg.games[g].wins}x</b> ${g.toUpperCase()}`;
+    cg.winsToGo -= 1;
+    if (cg.winsToGo != 0) {
+        games_btn.innerHTML = `${cg.winsToGo}x GAMES`;
+    } else {
+        games_btn.innerHTML = "GAMES";
+        games_btn.disabled = true;
+    }
 }
 
 function getRandomInt(min, max) {
@@ -110,9 +129,14 @@ function wins() {
     wheel.rotationResistance = -240;
     wheel.image = "./imgs/hyiep.png"
     wheel.onRest = async (e) => {
+        let cg = currentGame;
         await wheelFinishAnimation(wheel, wheel._items[e.currentIndex]);
-        currentGame.wins = wheel._items[e.currentIndex].label;
-        finishGame();
+        cg.wins = wheel._items[e.currentIndex].label;
+        cg.winsToGo = cg.wins;
+        wins_btn.disabled = true;
+        result_header.innerHTML = `In <b>${cg.time}</b> win <b>${cg.wins}</b> games:`;
+        result_table.innerHTML = "";
+        games_btn.innerHTML = `${cg.wins}x GAMES`;
     };
     return wheel;
 }
@@ -140,7 +164,8 @@ function times() {
     wheel.onRest = async (e) => {
         await wheelFinishAnimation(wheel, wheel._items[e.currentIndex]);
         currentGame.time = wheel._items[e.currentIndex].label;
-        finishGame();
+        time_btn.disabled = true;
+        games_btn.disabled = false;
     };
     return wheel;
 }
@@ -172,8 +197,7 @@ function games() {
     wheel.onRest = async (e) => {
         let finishItem = wheel._items[e.currentIndex];
         await gameFinishAnimation(wheel, finishItem);
-        currentGame.game = data.games[finishItem.value].name;
-        finishGame();
+        addGame(data.games[finishItem.value].name);
     }
     return wheel;
 }
@@ -231,20 +255,6 @@ async function gameFinishAnimation(w, finishItem) {
 
 }
 
-function finishGame() {
-    let hasNull = false;
-    for (let prop in currentGame)
-        hasNull |= (currentGame[prop] == null)
-
-    if (!hasNull) {
-        addResult();
-        for (let prop in currentGame)
-            currentGame[prop] = null
-        globalResetOk = true;
-        activateButtons(false);
-    }
-}
-
 function resetGame() {
     if (winsWheel != null) winsWheel.remove();
     if (timeWheel != null) timeWheel.remove();
@@ -253,14 +263,6 @@ function resetGame() {
     timeWheel = times()
     gamesWheel = games()
 }
-
-document.querySelector("body").addEventListener('click', (e) => {
-    if (globalResetOk) {
-        resetGame();
-        globalResetOk = false;
-        activateButtons(true);
-    } 
-}, true);
 
 function spinConfig(wheel, arr) {
     wheel.spinToItem(
@@ -276,9 +278,11 @@ function spinConfig(wheel, arr) {
             return 1 - t1 * t1 * t1 * t1;
         });
 }
+
 time_btn.addEventListener('click', (e) => { spinConfig(timeWheel, data.time); })
 games_btn.addEventListener('click', (e) => { spinConfig(gamesWheel, gamesWheel.items); })
 wins_btn.addEventListener('click', (e) => { spinConfig(winsWheel, data.wins); })
 
+// GAME SETUP
 resetGame();
-activateButtons(true);
+games_btn.disabled = true;
