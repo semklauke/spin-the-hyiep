@@ -9,7 +9,7 @@ spinwheeldata = {
         },
         "minecraft_jump" : {
             "img" : "./imgs/Minecraft_2009_icon.png",
-            "name" : "Minecraft\n Jump'n Run",
+            "name" : "Minecraft Jump'n Run",
             "color" : "#E88AE6"
         },
         "fortnite_normal" : {

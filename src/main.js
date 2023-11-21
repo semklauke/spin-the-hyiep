@@ -78,21 +78,11 @@ function activateButtons(state) {
 
 function addGame(g) {
     let cg = currentGame;
-    let td = null;
     if (g in cg.games) {
-        cg.games[g].wins += 1;
-        td = cg.games[g].td;
+        cg.games[g] += 1;
     } else {
-        let tr = document.createElement("tr");
-        td = document.createElement("td");
-        tr.appendChild(td);
-        result_table.appendChild(tr);
-        cg.games[g] = {
-            wins: 1,
-            td: td
-        }
+        cg.games[g] = 1;
     }
-    td.innerHTML = `<b>${cg.games[g].wins}x</b> ${g.toUpperCase()}`;
     cg.winsToGo -= 1;
     if (cg.winsToGo != 0) {
         games_btn.innerHTML = `${cg.winsToGo}x GAMES`;
@@ -134,8 +124,6 @@ function wins() {
         cg.wins = wheel._items[e.currentIndex].label;
         cg.winsToGo = cg.wins;
         wins_btn.disabled = true;
-        result_header.innerHTML = `In <b>${cg.time}</b> win <b>${cg.wins}</b> games:`;
-        result_table.innerHTML = "";
         games_btn.innerHTML = `${cg.wins}x GAMES`;
     };
     return wheel;
@@ -196,8 +184,8 @@ function games() {
     wheel.image = "./imgs/hyiep.png"
     wheel.onRest = async (e) => {
         let finishItem = wheel._items[e.currentIndex];
-        await gameFinishAnimation(wheel, finishItem);
         addGame(data.games[finishItem.value].name);
+        await gameFinishAnimation(wheel, finishItem);
     }
     return wheel;
 }
@@ -225,7 +213,6 @@ async function wheelFinishAnimation(w, finishItem) {
 
 async function gameFinishAnimation(w, finishItem) {
     await sleep(300);
-    console.log(finishItem);
     let ctx = w._context;
     ctx.save();
     ctx.fillStyle = finishItem.backgroundColor ?? "#C1C1C1";
@@ -239,20 +226,40 @@ async function gameFinishAnimation(w, finishItem) {
         await sleep(waitTime);
     } 
     ctx.fillStyle = finishItem.labelColor ?? "#FFFFFF";
-    let fontSize = w.itemLabelFontSize*0.7
-    changeFontSizeOfCtx(ctx, fontSize);
-    // draw text
-    for (let [i, line] of data.games[finishItem.value].name.split('\n').entries()) {
-        ctx.fillText(line, w._center.x, w._center.y*1.4+i*fontSize);
+    let fontSize = w.itemLabelFontSize*0.43
+    let cg = currentGame;
+    
+    if (cg.winsToGo != 0) {
+        // text
+        changeFontSizeOfCtx(ctx, fontSize);
+        let i = 0;
+        for (let g in cg.games) {
+            ctx.fillText(
+                `${cg.games[g]}x ${g}`, 
+                w._center.x, 
+                w._center.y*0.62+i*(fontSize*1.1)
+            );
+            i++;
+        }
+        // image draw
+        const width = (w._size / 1500) * finishItem.image.width * finishItem.imageScale;
+        const height = (w._size / 1500) * finishItem.image.height * finishItem.imageScale;
+        const widthHalf = w._center.x - (width / 2);
+        const heightHalf = w._center.y - (height / 0.4 );
+        ctx.drawImage(finishItem.image, widthHalf, heightHalf, width, height);
+    } else {
+        changeFontSizeOfCtx(ctx, fontSize*1.1);
+        let i = 0;
+        for (let g in cg.games) {
+            ctx.fillText(
+                `${cg.games[g]}x ${g}`, 
+                w._center.x, 
+                w._center.y*0.53+i*(fontSize*1.25)
+            );
+            i++;
+        } 
     }
-    // image draw
-    const width = (w._size / 600) * finishItem.image.width * finishItem.imageScale;
-    const height = (w._size / 600) * finishItem.image.height * finishItem.imageScale;
-    const widthHalf = w._center.x - (width / 2);
-    const heightHalf = w._center.y - (height / 1.3 );
-    ctx.drawImage(finishItem.image, widthHalf, heightHalf, width, height);
     ctx.restore();
-
 }
 
 function resetGame() {
@@ -285,4 +292,4 @@ wins_btn.addEventListener('click', (e) => { spinConfig(winsWheel, data.wins); })
 
 // GAME SETUP
 resetGame();
-games_btn.disabled = true;
+//games_btn.disabled = true;
