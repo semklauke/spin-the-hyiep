@@ -292,4 +292,4 @@ wins_btn.addEventListener('click', (e) => { spinConfig(winsWheel, data.wins); })
 
 // GAME SETUP
 resetGame();
-//games_btn.disabled = true;
+games_btn.disabled = true;
